@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:orientation="vertical"
+    tools:context=".CreatePinActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="12dp"
+        android:padding="4dp"
+        android:src="@drawable/pin_code" />
+
+    <EditText
+        android:id="@+id/create_new_pin_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="New Pin"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/create_confirm_pin_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm New Pin"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/error_create_pin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:text="!some error"
+        android:textColor="#e12016" />
+
+    <Button
+        android:id="@+id/bt_create_pin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:text="Create new pin" />
+
+</LinearLayout>

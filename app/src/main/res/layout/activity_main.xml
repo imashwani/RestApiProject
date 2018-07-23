@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:contentDescription="phone"
+                android:padding="4dp"
+                android:src="@drawable/phone_hand_ring" />
+
+
+            <EditText
+                android:id="@+id/input_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/ic_account_circle_black_24dp"
+                android:hint="@string/_10_digit_mobile_number"
+                android:inputType="phone"
+                android:padding="8dp"
+                android:text="9911416637" />
+
+
+            <TextView
+                android:id="@+id/login_error_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="error"
+                android:textColor="#e9132f"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/submit_button_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="login" />
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="18dp"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+</android.support.v4.widget.NestedScrollView>
