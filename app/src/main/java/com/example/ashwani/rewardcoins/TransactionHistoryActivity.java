@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.ashwani.rewardcoins.RecyclerView.CoinTransaction;
 import com.example.ashwani.rewardcoins.RecyclerView.CoinTransactionAdapter;
@@ -19,8 +20,9 @@ public class TransactionHistoryActivity extends AppCompatActivity {
     private static final String TAG = "TransactionHistoryActivity";
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
-    CoinTransactionAdapter mComplaintAdapter;
-    //    View rootView;
+    CoinTransactionAdapter mCoinTransactionAdapter;
+    TextView emptyMsgTV;
+
     ProgressBar progressBar;
     ArrayList<CoinTransaction> compList;
 
@@ -29,10 +31,11 @@ public class TransactionHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_history);
         progressBar = findViewById(R.id.progressBar_txn);
+        emptyMsgTV = findViewById(R.id.txn_history_msg_tv);
+
         startLoading();
     }
 
-    @SuppressLint("LongLogTag")
     private void startLoading() {
         mRecyclerView = findViewById(R.id.recycler_view_txn);
         mLayoutManager = new LinearLayoutManager(this);
@@ -40,20 +43,31 @@ public class TransactionHistoryActivity extends AppCompatActivity {
         compList = new ArrayList<>();
         compList = getArrayList();
 
-        mComplaintAdapter = new CoinTransactionAdapter(this, compList);
-        mRecyclerView.setAdapter(mComplaintAdapter);
-        progressBar.setVisibility(View.INVISIBLE);
-
-        Log.d(TAG, "onCreateView: list hai " + compList.toString());
-
+        if (compList.isEmpty()) {
+            progressBar.setVisibility(View.INVISIBLE);
+            emptyMsgTV.setVisibility(View.VISIBLE);
+            emptyMsgTV.setText("No items of transaction are available");
+            mRecyclerView.setVisibility(View.INVISIBLE);
+        } else setDataToRV();
     }
 
+    @SuppressLint("LongLogTag")
+    void setDataToRV() {
+        mRecyclerView.setVisibility(View.VISIBLE);
+
+        mCoinTransactionAdapter = new CoinTransactionAdapter(this, compList);
+
+        mRecyclerView.setAdapter(mCoinTransactionAdapter);
+        mRecyclerView.setHasFixedSize(true);
+        progressBar.setVisibility(View.INVISIBLE);
+        Log.d(TAG, "onCreateView: list hai " + compList.toString());
+    }
     public ArrayList<CoinTransaction> getArrayList() {
         final ArrayList<CoinTransaction> arrayList = new ArrayList<>();
         // Obtain a new or prior instance of HotStockViewModel from the
         // ViewModelProviders utility class.
-        arrayList.add(new CoinTransaction(250, "Ranjit", "manoj", "99445566886", "14 aug 2017", "12:55 AM"));
-        arrayList.add(new CoinTransaction(250, "Ranjit", "manoj", "99445566886", "14 aug 2017", "12:55 AM"));
+        //arrayList.add(new CoinTransaction(250, "Ranjit", "manoj", "99445566886", "14 aug 2017", "12:55 AM"));
+        // arrayList.add(new CoinTransaction(250, "Ranjit", "manoj", "99445566886", "14 aug 2017", "12:55 AM"));
 
         return arrayList;
     }

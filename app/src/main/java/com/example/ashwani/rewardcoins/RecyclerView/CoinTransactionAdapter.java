@@ -36,14 +36,14 @@ public class CoinTransactionAdapter extends RecyclerView.Adapter<CoinTransaction
         //set data to each of textViews
         holder.timeTxn.setText(transactionList.get(position).getTime());
         holder.receiverPhonenoTxn.setText(transactionList.get(position).getReceiverPhoneNo());
-        holder.noOfCoinsTxn.setText(transactionList.get(position).getNumberOfCoins());
+        holder.noOfCoinsTxn.setText(String.valueOf(transactionList.get(position).getNumberOfCoins()));
         holder.receiverPhonenoTxn.setText(transactionList.get(position).getReceiverPhoneNo());
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return transactionList.size();
     }
 
     public class CoinTransactionViewHolder extends RecyclerView.ViewHolder {

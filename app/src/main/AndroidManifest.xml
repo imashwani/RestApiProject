@@ -52,7 +52,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TransactionHistoryActivity" />
+        <activity
+            android:name=".TransactionHistoryActivity"
+            android:parentActivityName=".MemberActivity" />
         <activity
             android:name=".EnterPinActivity"
             android:windowSoftInputMode="adjustResize" />

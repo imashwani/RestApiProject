@@ -106,7 +106,7 @@ public class EnterPinActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 5) {
+                if (s.length() == 4) {
                     submitBt.setVisibility(View.VISIBLE);
                 } else {
                     submitBt.setVisibility(View.INVISIBLE);
