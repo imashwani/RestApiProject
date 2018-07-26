@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.ashwani.rewardcoins.RecyclerView.CoinTransaction;
@@ -29,7 +30,6 @@ public class TransactionHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transaction_history);
         progressBar = findViewById(R.id.progressBar_txn);
         startLoading();
-
     }
 
     @SuppressLint("LongLogTag")
@@ -42,8 +42,9 @@ public class TransactionHistoryActivity extends AppCompatActivity {
 
         mComplaintAdapter = new CoinTransactionAdapter(this, compList);
         mRecyclerView.setAdapter(mComplaintAdapter);
+        progressBar.setVisibility(View.INVISIBLE);
 
-        Log.d(TAG, "onCreateView: list hai " + compList);
+        Log.d(TAG, "onCreateView: list hai " + compList.toString());
 
     }
 

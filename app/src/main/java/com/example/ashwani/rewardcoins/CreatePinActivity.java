@@ -119,7 +119,8 @@ public class CreatePinActivity extends AppCompatActivity {
         newPin1 = findViewById(R.id.new_pin1);
         newPin2 = findViewById(R.id.new_pin2);
         createPinBT = findViewById(R.id.bt_change_pin);
-        error = findViewById(R.id.error_change_pin);
+        error = findViewById(R.id.error_create_pin);
+
         error.setVisibility(View.GONE);
         error.setText("");
     }

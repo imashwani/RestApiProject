@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                         if (cpin) {
                             //He is a new user
                             intent = new Intent(MainActivity.this, OtpVerifyActivity.class);
+                            intent.putExtra(Util.getWheretoKey(), "createNewPin");
                         } else {
                             intent = new Intent(MainActivity.this, EnterPinActivity.class);
                         }
