@@ -35,16 +35,18 @@ public class SplashActivity extends AppCompatActivity {
                 getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
         token = sharedPreferences.getString(Util.getTokenKey(), "");
         mobileNo = sharedPreferences.getString(Util.getPhonenoKey(), "");
-
+        Log.d(TAG, "onCreate: token: " + token);
+        Log.d(TAG, "onCreate: " + mobileNo);
         int delayDuration = 800;
         new Handler().postDelayed(() -> {
 
             Intent intent = null;
-            if (token.length() < 1) {
+            if (token.equals("")) {
                 intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {
+
                 makeApiRequest();
             }
 
@@ -54,8 +56,8 @@ public class SplashActivity extends AppCompatActivity {
     void makeApiRequest() {
         Map<String, Object> jsonParams = new ArrayMap<>();
         //put something inside the map, could be null
-        jsonParams.put(Util.getTokenKey(), token);
-        jsonParams.put(Util.getPhonenoKey(), mobileNo);
+        jsonParams.put("token", "Bearer " + token);
+        jsonParams.put("mob", mobileNo);
 //        jsonParams.put("pin", pinET.getText().toString());
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(jsonParams)).toString());
@@ -76,15 +78,16 @@ public class SplashActivity extends AppCompatActivity {
 
                         Intent intentW = new Intent(SplashActivity.this, MemberActivity.class);
 
-                        intentW.putExtra("username", username);
-                        intentW.putExtra("acessLevel", al);
-                        intentW.putExtra("coins", coins);
+                        intentW.putExtra(Util.getUsernameKey(), username);
+                        intentW.putExtra(Util.getAccessLevelKey(), al);
+                        intentW.putExtra(Util.getCoinsKey(), coins);
+                        intentW.putExtra(Util.getPhonenoKey(), mobileNo);
 
                         startActivity(intentW);
                         finish();
                     }
                 } else {
-                    Toast.makeText(SplashActivity.this, "No response from Server, Retrying...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SplashActivity.this, "Failed response from Server, Retrying...", Toast.LENGTH_SHORT).show();
                     makeApiRequest();
                 }
             }
@@ -92,7 +95,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<SplashResponse> call, Throwable t) {
                 Toast.makeText(SplashActivity.this, "Server Under Maintenance,Retrying...", Toast.LENGTH_SHORT).show();
-                makeApiRequest();
+//                makeApiRequest();
             }
         });
     }

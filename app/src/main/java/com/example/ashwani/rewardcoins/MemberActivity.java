@@ -49,13 +49,13 @@ public class MemberActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         phoneNumberNavBar = header.findViewById(R.id.phone_no_navbar);
 
-        if (getIntent().hasExtra("phone")) {
-            phoneNumberNavBar.setText(getIntent().getStringExtra("phone"));
+        if (getIntent().hasExtra(Util.getPhonenoKey())) {
+            phoneNumberNavBar.setText(getIntent().getStringExtra(Util.getPhonenoKey()));
         }
 
         userCoins.setText("");
-        if (getIntent().hasExtra("coin")) {
-            userCoins.setText(getIntent().getStringExtra("coin"));
+        if (getIntent().hasExtra(Util.getCoinsKey())) {
+            userCoins.setText(getIntent().getStringExtra(Util.getCoinsKey()));
         }
         //TODO: implent hide and show method
         transferCoinsInit.setOnClickListener(new View.OnClickListener() {

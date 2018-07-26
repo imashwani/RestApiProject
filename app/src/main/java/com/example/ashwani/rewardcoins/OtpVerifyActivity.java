@@ -200,15 +200,32 @@ public class OtpVerifyActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<OtpHVerifyResponse> call, Response<OtpHVerifyResponse> response) {
                 if (response.body().getSuccess() == true) {
+                    String username = response.body().getName();
+                    String al = response.body().getAl();
+                    String coins = response.body().getCoins().toString();
+                    String token = response.body().getToken();
+                    SharedPreferences.Editor editor =
+                            getSharedPreferences("com.example.app", Context.MODE_PRIVATE).edit();
+                    editor.putString(Util.getTokenKey(), token);
+                    editor.apply();
 
                     Intent intent = new Intent(OtpVerifyActivity.this, MemberActivity.class);
+
+                    intent.putExtra(Util.getUsernameKey(), username);
+                    intent.putExtra(Util.getAccessLevelKey(), al);
+                    intent.putExtra(Util.getCoinsKey(), coins);
+                    intent.putExtra(Util.getPhonenoKey(), mobileNo);
+
                     startActivity(intent);
                     finish();
+                } else {
+                    Toast.makeText(OtpVerifyActivity.this, response.body().getMsg(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<OtpHVerifyResponse> call, Throwable t) {
+                Toast.makeText(OtpVerifyActivity.this, "No response from server", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -234,11 +251,14 @@ public class OtpVerifyActivity extends AppCompatActivity {
                     Intent intent = new Intent(OtpVerifyActivity.this, CreatePinActivity.class);
                     startActivity(intent);
                     finish();
+                } else {
+                    Toast.makeText(OtpVerifyActivity.this, response.body().getMsg(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<OtpLVerifyResponse> call, Throwable t) {
+                Toast.makeText(OtpVerifyActivity.this, "No response from server", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -36,8 +36,7 @@
                 android:drawableStart="@drawable/ic_account_circle_black_24dp"
                 android:hint="@string/_10_digit_mobile_number"
                 android:inputType="phone"
-                android:padding="8dp"
-                android:text="9911416637" />
+                android:padding="8dp" />
 
 
             <TextView

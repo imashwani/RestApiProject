@@ -23,11 +23,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".MemberActivity"
@@ -45,13 +40,15 @@
             android:name=".ChangePinActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".OtpVerifyActivity">
+        <activity
+            android:name=".OtpVerifyActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize">
 
         </activity>
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -59,7 +56,7 @@
         <activity
             android:name=".EnterPinActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".CreatePinActivity"></activity>
+        <activity android:name=".CreatePinActivity" />
     </application>
 
 </manifest>

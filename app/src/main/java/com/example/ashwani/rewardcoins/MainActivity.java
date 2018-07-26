@@ -1,13 +1,11 @@
 package com.example.ashwani.rewardcoins;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.util.ArrayMap;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
 
-                int delayDuration = 200;
+                int delayDuration = 100;
                 new Handler().postDelayed(() -> {
                     askForResponse();
                 }, delayDuration);
@@ -66,30 +64,27 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                phoneNumberET.setSelection(phoneNumberET.length());
-                if (!isValidMobileNb(s)) {
-                    phoneNumberET.setError("Not a VALID mobile number");
-                    submitBT.setVisibility(View.INVISIBLE);
-
-                } else {
-                    submitBT.setVisibility(View.VISIBLE);
-                }
-
+                isShowLoginButton(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                phoneNumberET.setSelection(phoneNumberET.length());
-
-                if (!isValidMobileNb(s)) {
-                    phoneNumberET.setError("Not a VALID mobile number");
-                    submitBT.setVisibility(View.INVISIBLE);
-
-                } else {
-                    submitBT.setVisibility(View.VISIBLE);
-                }
+                isShowLoginButton(s.toString());
             }
         });
+
+        phoneNumberET.setText("9911416637");
+    }
+
+    private void isShowLoginButton(String s) {
+        phoneNumberET.setSelection(phoneNumberET.length());
+        if (!isValidMobileNb(s)) {
+            phoneNumberET.setError("Not a VALID mobile number");
+            submitBT.setVisibility(View.INVISIBLE);
+
+        } else {
+            submitBT.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -156,32 +151,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    public void showRequestPermissionsInfoAlertDialog() {
-        showRequestPermissionsInfoAlertDialog(true);
-    }
-
-    public void showRequestPermissionsInfoAlertDialog(final boolean makeSystemRequest) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.permission_alert_dialog_title); // Your own title
-        builder.setMessage(R.string.permission_dialog_message); // Your own message
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                // Display system runtime permission request?
-                if (makeSystemRequest) {
-//                    requestReadAndSendSmsPermission();
-                }
-            }
-        });
-
-        builder.setCancelable(false);
-        builder.show();
-    }
-
-
     void initViews() {
 
         phoneNumberET = findViewById(R.id.input_phone_number);
@@ -190,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar_login);
 
         submitBT.setVisibility(View.INVISIBLE);
+
     }
 
     private boolean isValidMobileNb(CharSequence s) {

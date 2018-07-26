@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.ashwani.rewardcoins.RecyclerView.CoinTransaction;
@@ -20,7 +19,7 @@ public class TransactionHistoryActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
     CoinTransactionAdapter mComplaintAdapter;
-    View rootView;
+    //    View rootView;
     ProgressBar progressBar;
     ArrayList<CoinTransaction> compList;
 
@@ -35,7 +34,7 @@ public class TransactionHistoryActivity extends AppCompatActivity {
 
     @SuppressLint("LongLogTag")
     private void startLoading() {
-        mRecyclerView = rootView.findViewById(R.id.recycler_view_txn);
+        mRecyclerView = findViewById(R.id.recycler_view_txn);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         compList = new ArrayList<>();

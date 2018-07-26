@@ -1,10 +1,14 @@
 package com.example.ashwani.rewardcoins;
 
 public final class Util {
-    public static final String USERNAME_KEY = "USERNAME_KEY", RECEIVERNAME_KEY = "RECEIVERNAME_KEY", PHONENO_KEY = "PHONENO_KEY", COINS_KEY = "COINS_KEY", TOKEN_KEY = "TOKEN_KEY", WHERETO_KEY = "WHERETO_KEY";
+    public static final String USERNAME_KEY = "USERNAME_KEY", RECEIVERNAME_KEY = "RECEIVERNAME_KEY", PHONENO_KEY = "PHONENO_KEY", COINS_KEY = "COINS_KEY", TOKEN_KEY = "TOKEN_KEY", WHERETO_KEY = "WHERETO_KEY", ACCESS_LEVEL_KEY = "ACCESS_LEVEL_KEY";
 
     public static String getWheretoKey() {
         return WHERETO_KEY;
+    }
+
+    public static String getAccessLevelKey() {
+        return ACCESS_LEVEL_KEY;
     }
 
     public static String getUsernameKey() {
