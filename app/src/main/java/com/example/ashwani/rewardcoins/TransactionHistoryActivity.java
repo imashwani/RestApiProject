@@ -43,7 +43,6 @@ public class TransactionHistoryActivity extends AppCompatActivity {
         mComplaintAdapter = new CoinTransactionAdapter(this, compList);
         mRecyclerView.setAdapter(mComplaintAdapter);
 
-
         Log.d(TAG, "onCreateView: list hai " + compList);
 
     }
