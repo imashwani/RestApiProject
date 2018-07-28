@@ -47,9 +47,42 @@
             android:inputType="number"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#deb53d"
+            android:textColor="#f4bb15"
             android:textStyle="bold" />
     </android.support.design.widget.TextInputLayout>
+
+    <RadioGroup
+        android:id="@+id/mode_radio_grp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp">
+
+        <RadioButton
+            android:id="@+id/online_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Online" />
+
+        <RadioButton
+            android:id="@+id/cash_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash" />
+
+        <RadioButton
+            android:id="@+id/cheque_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cheque" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/reference_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="Reference No." />
 
     <Button
         android:id="@+id/send_coin_button"

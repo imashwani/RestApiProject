@@ -54,6 +54,8 @@
         </activity>
         <activity
             android:name=".TransactionHistoryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".MemberActivity" />
         <activity
             android:name=".EnterPinActivity"

@@ -2,10 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="4dp"
     android:background="@drawable/rounder_corner_bg"
-    android:padding="4dp"
-    android:layout_height="wrap_content">
+    android:padding="4dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -14,33 +14,38 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
         android:orientation="vertical"
-        android:padding="8dp"
+        android:padding="2dp"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:padding="4dp"
-            android:text="Successfully Sent On" />
+            android:src="@drawable/money_note" />
+
+        <TextView
+            android:id="@+id/no_of_coins_txn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:text="Rs. 105"
+            android:textColor="@color/blue_fav"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/receiver_phone_no_tv_txn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_gravity="center" />
-
-        <TextView
-            android:id="@+id/time_tv_txn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="11:45 AM 22 aug 2018 "
-            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,28 +54,39 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
         android:orientation="vertical"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
+        <TextView
+            android:id="@+id/time_tv_txn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:padding="4dp"
-            android:src="@drawable/coin_img" />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/date_time_fake"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/no_of_coins_txn"
+            android:id="@+id/actual_rec_tv_txn"
+            android:layout_marginTop="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="3dp"
-            android:padding="4dp"
-            android:text="200 Coins"
-            android:textStyle="bold" />
+            android:text="Actual Recharge: 200" />
+
+        <TextView
+            android:id="@+id/offer_credit_tv_txn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="2dp"
+            android:text="Offere  Credit: 6.25" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

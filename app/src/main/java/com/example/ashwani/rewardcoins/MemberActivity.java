@@ -38,6 +38,7 @@ public class MemberActivity extends AppCompatActivity
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,8 +117,12 @@ public class MemberActivity extends AppCompatActivity
                 break;
             case FragmentActionListener.ACTION_VALUE_SEND_SELECTED:
                 hideForm();
+                if (bundle.get(FragmentActionListener.KEY_UPDATED_BAL) != null) {
+
+                    updateBalance(bundle.getString(FragmentActionListener.KEY_UPDATED_BAL));
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialog);
-                builder.setTitle("Transaction Successful").setCancelable(true);
+                builder.setTitle("TransactionCls Successful").setCancelable(true);
                 builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -253,6 +258,10 @@ public class MemberActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    void updateBalance(String bal) {
+        userCoins.setText("bal");
     }
 
 

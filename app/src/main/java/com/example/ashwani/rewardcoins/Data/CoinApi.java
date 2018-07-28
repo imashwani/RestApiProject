@@ -47,5 +47,14 @@ public class CoinApi {
         @POST("house/verROTPL")
         Call<OtpLVerifyResponse> verifyLoginOtp(@Body RequestBody jsonObject);
 
+        @POST("house/tnpcheck")
+        Call<UserDataResponse> userDataFromPhoneNo(@Body RequestBody jsonObject);
+
+        @POST("house/transfer")
+        Call<TransactionResponse> coinTransaction(@Body RequestBody jsonObject);
+
+        @POST("house/tranHis")
+        Call<TransactionHistoryResponse> coinTxnHistory(@Body RequestBody jsonObject);
+
     }
 }

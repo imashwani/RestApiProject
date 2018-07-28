@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +31,7 @@ import retrofit2.Response;
 public class CreatePinActivity extends AppCompatActivity {
     private static final String TAG = "CreatePinActivity";
     TextView error;
-    EditText newPin1, newPin2;
+    EditText newPinET, confirmPinET;
     Button createPinBT;
     String mobileNo = null;
 
@@ -59,7 +61,7 @@ public class CreatePinActivity extends AppCompatActivity {
                     Map<String, Object> jsonParams = new ArrayMap<>();
                     //put something inside the map, could be null
                     jsonParams.put("mob", mobileNo);
-                    jsonParams.put("pin", newPin1.getText().toString());
+                    jsonParams.put("pin", newPinET.getText().toString());
                     Log.d(TAG, "onClick: json sending data : " + jsonParams);
 
                     RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(jsonParams)).toString());
@@ -98,14 +100,35 @@ public class CreatePinActivity extends AppCompatActivity {
             }
         });
 
+        newPinET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 4) {
+                    newPinET.setError("PIN must of 4 digit");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() != 4) {
+                    newPinET.setError("PIN must of 4 digit");
+                }
+
+            }
+        });
+
     }
 
 
     private int checkData() {
         //1 represents all things are correct and good to go
         int b = 1;
-        String new1 = newPin1.getText().toString(),
-                new2 = newPin2.getText().toString();
+        String new1 = newPinET.getText().toString(),
+                new2 = confirmPinET.getText().toString();
 
         if (new1.length() == 0 || new2.length() == 0) {
             b = 0;
@@ -127,8 +150,8 @@ public class CreatePinActivity extends AppCompatActivity {
 
     private void initView() {
 
-        newPin1 = findViewById(R.id.create_new_pin_et);
-        newPin2 = findViewById(R.id.create_confirm_pin_et);
+        newPinET = findViewById(R.id.create_new_pin_et);
+        confirmPinET = findViewById(R.id.create_confirm_pin_et);
         createPinBT = findViewById(R.id.bt_create_pin);
         error = findViewById(R.id.error_create_pin);
 

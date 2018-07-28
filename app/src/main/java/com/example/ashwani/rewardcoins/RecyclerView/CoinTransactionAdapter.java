@@ -9,15 +9,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ashwani.rewardcoins.R;
+import com.example.ashwani.rewardcoins.TransactionCls;
 
 import java.util.ArrayList;
 
 public class CoinTransactionAdapter extends RecyclerView.Adapter<CoinTransactionAdapter.CoinTransactionViewHolder> {
 
-    private ArrayList<CoinTransaction> transactionList;
+    private ArrayList<TransactionCls> transactionList;
     private Context context;
 
-    public CoinTransactionAdapter(Context context, ArrayList<CoinTransaction> transactionList) {
+    public CoinTransactionAdapter(Context context, ArrayList<TransactionCls> transactionList) {
         this.context = context;
         this.transactionList = transactionList;
 
@@ -34,11 +35,14 @@ public class CoinTransactionAdapter extends RecyclerView.Adapter<CoinTransaction
     @Override
     public void onBindViewHolder(@NonNull CoinTransactionViewHolder holder, int position) {
         //set data to each of textViews
-        holder.timeTxn.setText(transactionList.get(position).getTime());
-        holder.receiverPhonenoTxn.setText(transactionList.get(position).getReceiverPhoneNo());
-        holder.noOfCoinsTxn.setText(String.valueOf(transactionList.get(position).getNumberOfCoins()));
-        holder.receiverPhonenoTxn.setText(transactionList.get(position).getReceiverPhoneNo());
 
+        //holder.receiverPhonenoTxn.setText(transactionList.get(position).getReceiverPhoneNo());
+        holder.timeTxn.setText(transactionList.get(position).getDate());
+        holder.actualRechargeAmount.setText(String.valueOf(transactionList.get(position).getActualRechargeAmount()));
+        holder.actualAmount.setText(String.valueOf(transactionList.get(position).getAmount()));
+        holder.offerCredit.setText(String.valueOf(transactionList.get(position).getOfferCredit()));
+
+//        holder.receiverPhonenoTxn.setText(transactionList.get(position).get());
     }
 
     @Override
@@ -47,12 +51,14 @@ public class CoinTransactionAdapter extends RecyclerView.Adapter<CoinTransaction
     }
 
     public class CoinTransactionViewHolder extends RecyclerView.ViewHolder {
-        TextView receiverPhonenoTxn, noOfCoinsTxn, timeTxn;
+        TextView actualRechargeAmount, offerCredit, actualAmount, timeTxn;
 
         public CoinTransactionViewHolder(View itemView) {
             super(itemView);
-            receiverPhonenoTxn = itemView.findViewById(R.id.receiver_phone_no_tv_txn);
-            noOfCoinsTxn = itemView.findViewById(R.id.no_of_coins_txn);
+//            receiverPhonenoTxn = itemView.findViewById(R.id.receiver_phone_no_tv_txn);
+            actualAmount = itemView.findViewById(R.id.no_of_coins_txn);
+            offerCredit = itemView.findViewById(R.id.offer_credit_tv_txn);
+            actualRechargeAmount = itemView.findViewById(R.id.actual_rec_tv_txn);
             timeTxn = itemView.findViewById(R.id.time_tv_txn);
         }
     }

@@ -207,6 +207,8 @@ public class OtpVerifyActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor =
                             getSharedPreferences("com.example.app", Context.MODE_PRIVATE).edit();
                     editor.putString(Util.getTokenKey(), token);
+                    editor.putString(Util.getUsernameKey(), username);
+                    editor.putString(Util.getAccessLevelKey(), al);
                     editor.apply();
 
                     Intent intent = new Intent(OtpVerifyActivity.this, MemberActivity.class);

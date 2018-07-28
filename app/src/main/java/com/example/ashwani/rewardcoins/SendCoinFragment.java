@@ -3,6 +3,7 @@ package com.example.ashwani.rewardcoins;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.ArrayMap;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -11,7 +12,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.ashwani.rewardcoins.Data.CoinApi;
+import com.example.ashwani.rewardcoins.Data.TransactionResponse;
+
+import org.json.JSONObject;
+
+import java.util.Map;
+
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
@@ -24,11 +40,14 @@ public class SendCoinFragment extends Fragment {
     FragmentActionListener fragmentActionListener;
 
     Button sendCoinBT;
-    EditText coinsToSend;
+    EditText coinsToSend, referenceNoEt;
     TextView receiverPhoneTV, receiverNameTV, userCoins;
     String receiverName, receiverPhone;
-    Bundle bundle;
+    Bundle receivedBundle;
     View root;
+    String userType = "";
+    RadioGroup radioGroup;
+    String modeOfTxn = "";
 
     public SendCoinFragment() {// Required empty public constructor
     }
@@ -38,33 +57,72 @@ public class SendCoinFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_send_coin, container, false);
-        bundle = getArguments();
+        receivedBundle = getArguments();
+        userType = receivedBundle.get(FragmentActionListener.KEY_USER_TYPE).toString();
+        Log.d(TAG, "onCreateView: userType: " + userType);
 
         initView();
 
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if (checkedId == R.id.cash_rb) {
+                    referenceNoEt.setVisibility(View.GONE);
+                } else {
+                    referenceNoEt.setVisibility(View.VISIBLE);
+                }
+
+                switch (checkedId) {
+                    case R.id.online_rb:
+                        modeOfTxn = "Online";
+                        break;
+                    case R.id.cash_rb:
+                        modeOfTxn = "Cash";
+                        break;
+                    case R.id.cheque_rb:
+                        modeOfTxn = "Cheque";
+                        break;
+
+
+                }
+            }
+        });
+        RadioButton online = root.findViewById(R.id.online_rb);
+        online.setChecked(true);
 
         sendCoinBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                sendCoinsShowDialog(coinsToSend.getEditableText().toString());
+                if (coinsToSend.getText().length() > 0) {
+
+                    sendCoinsShowDialog(coinsToSend.getEditableText().toString());
+                } else {
+                    coinsToSend.setError("Enter no. of coins");
+                }
+
 
             }
         });
-        coinsToSend.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        Log.d(TAG, "onCreateView: " + userType.equals("C"));
+        if (!(userType.equals("C"))) {
+            coinsToSend.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isValidData(s.toString());
-            }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    isValidData(s.toString());
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                isValidData(s.toString());
-            }
-        });
+                @Override
+                public void afterTextChanged(Editable s) {
+                    isValidData(s.toString());
+                }
+            });
+
+        }
 
         return root;
     }
@@ -95,9 +153,12 @@ public class SendCoinFragment extends Fragment {
         sendCoinBT = root.findViewById(R.id.send_coin_button);
         coinsToSend = root.findViewById(R.id.coins_to_Send);
         userCoins = getActivity().findViewById(R.id.user_coin_tv);
+        referenceNoEt = root.findViewById(R.id.reference_no);
+        referenceNoEt.setVisibility(View.GONE);
 
-        receiverName = bundle.getString(FragmentActionListener.KEY_NAME_RECEIVER);
-        receiverPhone = bundle.getString(FragmentActionListener.KEY_RECEIVER_PHONE);
+        receiverName = receivedBundle.getString(FragmentActionListener.KEY_NAME_RECEIVER);
+        receiverPhone = receivedBundle.getString(FragmentActionListener.KEY_RECEIVER_PHONE);
+        radioGroup = root.findViewById(R.id.mode_radio_grp);
 
 
         receiverPhoneTV.setText(receiverPhone);
@@ -105,56 +166,68 @@ public class SendCoinFragment extends Fragment {
     }
 
 
-//    private void sendCoinsShowDialog(String number) {
-//
-//        Map<String, Object> jsonParams = new ArrayMap<>();
-//        //put something inside the map, could be null
-//
-//        jsonParams.put("dea", "7974302600");
-//        jsonParams.put("pla", receiverPhone);
-//        jsonParams.put("pcoin", number);
-//        jsonParams.put("dcoin", number);
-//
-//        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
-//                (new JSONObject(jsonParams)).toString());
-//        //serviceCaller is the interface initialized with retrofit.create...
-//        Call<CoinTransferResponse> call = CoinApi.getCoinService().coinTransfer(body);
-//
-//        Log.d(TAG, "onClick: " + jsonParams);
-//
-//        call.enqueue(new Callback<CoinTransferResponse>() {
-//            @Override
-//            public void onResponse(Call<CoinTransferResponse> call, Response<CoinTransferResponse> response) {
-//                String status = response.body().getSuccess().toString();
-//
-//                if (status.equals("true")) {
-//                    Toast.makeText(getActivity(), "The transaction is successful",
-//                            Toast.LENGTH_SHORT).show();
-//                    if (fragmentActionListener != null) {
-//                        Log.d(TAG, "onResponse: not null " + fragmentActionListener);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putInt(FragmentActionListener.ACTION_KEY, FragmentActionListener.ACTION_VALUE_SEND_SELECTED);
-//                        bundle.putString(FragmentActionListener.KEY_NAME_RECEIVER, "Sanju");
-//                        bundle.putString(FragmentActionListener.KEY_RECEIVER_PHONE, "987654321");
-//                        bundle.putString(FragmentActionListener.KEY_TXN_AMMOUNT, "250");
-//                        bundle.putString(FragmentActionListener.KEY_TXN_TIME, "21:55 11/06/18");
-//
-//                        fragmentActionListener.onActionPerformed(bundle);
-//                    }
-//                } else {
-//                    Toast.makeText(getActivity(),
-//                            "Unsuccessful transaction; some error occurred",
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<CoinTransferResponse> call, Throwable t) {
-//                Toast.makeText(getActivity(), "transaction didn't went through",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void sendCoinsShowDialog(String number) {
+
+
+        Map<String, Object> jsonParams = new ArrayMap<>();
+        //put something inside the map, could be null
+
+        jsonParams.put("TOS", userType);
+        jsonParams.put("TOR", receivedBundle.get(FragmentActionListener.KEY_RECEIVER_TYPE).toString());
+        jsonParams.put("mobr", receivedBundle.get(FragmentActionListener.KEY_RECEIVER_PHONE).toString());
+        jsonParams.put("mobs", receivedBundle.get(FragmentActionListener.KEY_SENDER_PHONE).toString());
+        jsonParams.put("amt", Integer.parseInt(number));
+        jsonParams.put("tmod", modeOfTxn);
+        jsonParams.put("tid", referenceNoEt.getText().toString());
+
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
+                (new JSONObject(jsonParams)).toString());
+        //serviceCaller is the interface initialized with retrofit.create...
+        Call<TransactionResponse> call = CoinApi.getCoinService().coinTransaction(body);
+
+        Log.d(TAG, "onClick: " + jsonParams);
+
+        call.enqueue(new Callback<TransactionResponse>() {
+            @Override
+            public void onResponse(Call<TransactionResponse> call, Response<TransactionResponse> response) {
+                String status = response.body().getSuccess().toString();
+
+                if (status.equals("true")) {
+                    Toast.makeText(getActivity(), "The transaction is successful",
+                            Toast.LENGTH_SHORT).show();
+                    if (fragmentActionListener != null) {
+                        Log.d(TAG, "onResponse: not null " + fragmentActionListener);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(FragmentActionListener.ACTION_KEY, FragmentActionListener.ACTION_VALUE_SEND_SELECTED);
+
+                        bundle.putString(FragmentActionListener.KEY_NAME_RECEIVER, receiverName);
+                        bundle.putString(FragmentActionListener.KEY_RECEIVER_PHONE, receiverPhone);
+                        bundle.putString(FragmentActionListener.KEY_TXN_AMMOUNT, response.body().getTamt().toString());
+                        bundle.putString(FragmentActionListener.KEY_TXN_TIME, response.body().getTime());
+                        int updatedUserBalance = 0;
+                        if (!userType.equals("C")) {
+                            updatedUserBalance = response.body().getUbal();
+                        }
+                        bundle.putString(fragmentActionListener.KEY_UPDATED_BAL, String.valueOf(updatedUserBalance));
+
+                        fragmentActionListener.onActionPerformed(bundle);
+                    }
+                } else {
+                    Toast.makeText(getActivity(),
+                            "Unsuccessful transaction; some error occurred",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TransactionResponse> call, Throwable t) {
+                Toast.makeText(getActivity(), "transaction didn't went through",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
 
     public void setFragmentActionListener(FragmentActionListener fragmentActionListener) {
         this.fragmentActionListener = fragmentActionListener;

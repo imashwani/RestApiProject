@@ -59,7 +59,8 @@ public class EnterPinActivity extends AppCompatActivity {
                 jsonParams.put("pin", pinET.getText().toString());
 
 
-                RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(jsonParams)).toString());
+                RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
+                        (new JSONObject(jsonParams)).toString());
                 //serviceCaller is the interface initialized with retrofit.create...
                 Call<EnterPinResponse> response = CoinApi.getCoinService().enterPinCall(body);
 
@@ -78,6 +79,7 @@ public class EnterPinActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             } else {
+                                errorTv.setVisibility(View.VISIBLE);
                                 errorTv.setText("INVALID PIN,PLEASE RETRY!!");
 
 
@@ -91,6 +93,7 @@ public class EnterPinActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<EnterPinResponse> call, Throwable t) {
+                        errorTv.setVisibility(View.VISIBLE);
                         errorTv.setText("NO RESPONSE FROM SERVER,PLEASE RETRY!!");
                     }
                 });
@@ -106,8 +109,10 @@ public class EnterPinActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                errorTv.setVisibility(View.GONE);
                 if (s.length() == 4) {
                     submitBt.setVisibility(View.VISIBLE);
+
                 } else {
                     submitBt.setVisibility(View.INVISIBLE);
                 }
