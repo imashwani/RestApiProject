@@ -6,6 +6,9 @@ public interface FragmentActionListener {
     String ACTION_KEY = "action_key";
     int ACTION_VALUE_PROCEED_SELECTED = 1;
     int ACTION_VALUE_SEND_SELECTED = 2;
+    int ACTION_VALUE_DEBIT_SELECTED = 3;
+    int ACTION_VALUE_CREDIT_SELECTED = 4;
+
     String KEY_BALANCE = "KEY_BALANCE",
             KEY_NAME_RECEIVER = "KEY_NAME_RECEIVER",
             KEY_RECEIVER_PHONE = "KEY_RECEIVER_PHONE",

@@ -160,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar_login);
 
         submitBT.setVisibility(View.INVISIBLE);
-
     }
+
 
     private boolean isValidMobileNb(CharSequence s) {
         Log.d(TAG, "isValidMobileNb: phone number" + s + "\tlength:" + s.toString().length());

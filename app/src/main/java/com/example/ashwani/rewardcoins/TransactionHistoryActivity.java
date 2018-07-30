@@ -1,23 +1,18 @@
 package com.example.ashwani.rewardcoins;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ashwani.rewardcoins.Data.CoinApi;
 import com.example.ashwani.rewardcoins.Data.Tran;
 import com.example.ashwani.rewardcoins.Data.TransactionHistoryResponse;
-import com.example.ashwani.rewardcoins.RecyclerView.CoinTransactionAdapter;
 
 import org.json.JSONObject;
 
@@ -33,68 +28,84 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TransactionHistoryActivity extends AppCompatActivity {
+public class TransactionHistoryActivity extends AppCompatActivity implements FragmentActionListener {
 
-    private static final String TAG = "TransactionHistoryActivity";
-    RecyclerView mRecyclerView;
-    RecyclerView.LayoutManager mLayoutManager;
-    CoinTransactionAdapter mCoinTransactionAdapter;
-    TextView emptyMsgTV;
-    String userType;
-    ProgressBar progressBar;
-    ArrayList<TransactionCls> txnList;
+    private static final String TAG = "TrxHistoryActivity";
+
+    String userType, mobileNo;
+
+    ArrayList<TransactionCls> txnList, creditTxnList, debitTxnList;
+
+    ViewPager viewPager;
+    TabLayout tabLayout;
+    ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_history);
-        progressBar = findViewById(R.id.progressBar_txn);
-        emptyMsgTV = findViewById(R.id.txn_history_msg_tv);
 
         SharedPreferences sharedPreferences =
                 getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
+
         userType = sharedPreferences.getString(Util.getAccessLevelKey(), "");
+        mobileNo = sharedPreferences.getString(Util.getPhonenoKey(), "");
 
-        startLoading();
+        tabLayout = findViewById(R.id.tabs_transaction_history);
+        viewPager = findViewById(R.id.viewpager_transaction_history);
+
+        setupViewPager(viewPager);
+
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                loadList(position);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+        Log.d(TAG, "onCreate: view pager current" + viewPager.getCurrentItem());
+
+        loadList(0);
+
+//        int delayDuration = 500;
+//        new Handler().postDelayed(() -> {
+//            Log.d(TAG, "onCreate: ");
+//            updateAdapter(0);
+//
+//        }, delayDuration);
+
+
+//        startLoading();
+
     }
 
-    private void startLoading() {
-        mRecyclerView = findViewById(R.id.recycler_view_txn);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        txnList = new ArrayList<>();
-        getArrayList();
+    private void loadList(int position) {
+        String mode = "Debit";
 
-    }
+        if (position == 0) mode = "Credit";
 
-    @SuppressLint("LongLogTag")
-    void setDataToRV(ArrayList<TransactionCls> transactionList) {
-        mRecyclerView.setVisibility(View.VISIBLE);
-
-        mCoinTransactionAdapter = new CoinTransactionAdapter(this, transactionList);
-
-        mRecyclerView.setAdapter(mCoinTransactionAdapter);
-        mRecyclerView.setHasFixedSize(true);
-        progressBar.setVisibility(View.INVISIBLE);
-        Log.d(TAG, "onCreateView: list hai " + transactionList.toString());
-    }
-
-    @SuppressLint("LongLogTag")
-    public ArrayList<TransactionCls> getArrayList() {
-        final ArrayList<TransactionCls> arrayList = new ArrayList<>();
+        ArrayList<TransactionCls> arrayList = new ArrayList<>();
 
 //        arrayList.add(new TransactionCls("14 aug 2017 12:55 AM", "200", "122", "56" ));
 //         arrayList.add(new CoinTransaction(250, "Ranjit", "manoj", "99445566886", "14 aug 2017", "12:55 AM"));
 
         Map<String, Object> jsonParams = new ArrayMap<>();
         //put something inside the map, could be null
-        SharedPreferences sharedPreferences = getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
-//        token = sharedPreferences.getString(Util.getTokenKey(), "");
-        String userType = sharedPreferences.getString(Util.getAccessLevelKey(), "");
-        String mobileNo = sharedPreferences.getString(Util.getPhonenoKey(), "");
 
         jsonParams.put("TOS", userType);
-        jsonParams.put("ttype", "Debit");
+        jsonParams.put("ttype", mode);
         jsonParams.put("mob", mobileNo);
         Log.d(TAG, "onClick: json sending data : " + jsonParams.toString());
 
@@ -105,49 +116,74 @@ public class TransactionHistoryActivity extends AppCompatActivity {
         transactionHistoryResponseCall.enqueue(new Callback<TransactionHistoryResponse>() {
             @Override
             public void onResponse(Call<TransactionHistoryResponse> call, Response<TransactionHistoryResponse> response) {
-                Log.d(TAG, "onResponse: in trans history resp from server" + response.body().getSuccess());
-                if (response.body().getSuccess()) {
+                if (response.body() != null) {
+                    Log.d(TAG, "onResponse: in trans history resp from server" + response.body().getSuccess());
+                    if (response.body().getSuccess()) {
 
-                    List<Tran> trans = response.body().getTrans();
-                    Log.d(TAG, "onResponse: " + trans.get(0).toString());
-                    String date, amount, actRecAmt, offerCreditAmt;
+                        List<Tran> trans = response.body().getTrans();
+                        if (trans.size() > 0)
+                            Log.d(TAG, "onResponse: " + trans.get(0).toString());
+                        String date, amount, actRecAmt, offerCreditAmt;
 
 
-                    if (userType.equals("C")) {
-                        for (Tran t : trans) {
+                        if (userType.equals("C")) {
+                            for (Tran t : trans) {
 
-                            String pattern = "dd MMM yyyy\n hh:mm a";
-                            Date date1 = null;
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                            try {
-                                date1 = new SimpleDateFormat("MM/dd/yyyy, hh:mm:ss a").parse(t.getDate());
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                                String pattern = "dd MMM yyyy\n hh:mm a";
+                                Date date1 = null;
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                                try {
+                                    date1 = new SimpleDateFormat("MM/dd/yyyy, hh:mm:ss a").parse(t.getDate());
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                date = simpleDateFormat.format(date1);
+                                amount = "\u20B9 " + t.getAmount().toString();
+
+                                actRecAmt = "Collection: " + "\u20B9" + t.getActRecAmt().toString();
+                                offerCreditAmt = "Offer Credit: " + "\u20B9 " + t.getOffCreAmt();
+
+                                arrayList.add(new TransactionCls(date, amount, actRecAmt, offerCreditAmt));
                             }
+                        } else {
+                            for (Tran t : trans) {
+                                String pattern = "dd MMM yyyy\n hh:mm a";
+                                Date date1 = null;
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                                try {
+                                    date1 = new SimpleDateFormat("MM/dd/yyyy, hh:mm:ss a").parse(t.getDate());
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
 
-                            date = simpleDateFormat.format(date1);
-                            amount = "\u20B9 " + t.getAmount().toString();
-                            actRecAmt = "Collection: " + "\u20B9" + t.getActRecAmt().toString();
-                            offerCreditAmt = "Offer Credit: " + "\u20B9 " + t.getOffCreAmt();
+                                date = simpleDateFormat.format(date1);
 
-                            arrayList.add(new TransactionCls(date, amount, actRecAmt, offerCreditAmt));
+                                arrayList.add(new TransactionCls(date, t.getAmount().toString(),
+                                        "", ""));
+                            }
                         }
-                    } else {
-                        for (Tran t : trans) {
-                            arrayList.add(new TransactionCls(t.getDate(), t.getAmount().toString(),
-                                    "", ""));
-                        }
-                    }
 
-                    if (arrayList.isEmpty()) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        emptyMsgTV.setVisibility(View.VISIBLE);
-                        emptyMsgTV.setText("No items of transaction are available");
-                        mRecyclerView.setVisibility(View.INVISIBLE);
-                    } else setDataToRV(arrayList);
+//                    if (arrayList.isEmpty()) {
+//                        progressBar.setVisibility(View.INVISIBLE);
+//                        emptyMsgTV.setVisibility(View.VISIBLE);
+//                        emptyMsgTV.setText("No items of transaction are available");
+//                        mRecyclerView.setVisibility(View.INVISIBLE);
+//                    } else setDataToRV(arrayList);
 
+                        if (position == 0)
+                            creditTxnList = arrayList;
+                        else debitTxnList = arrayList;
+
+                        updateAdapter(position);
+
+                    } else
+                        Toast.makeText(TransactionHistoryActivity.this, "response success" + response.body().getSuccess(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(TransactionHistoryActivity.this, "response is null", Toast.LENGTH_SHORT).show();
                 }
             }
+
 
             @Override
             public void onFailure(Call<TransactionHistoryResponse> call, Throwable t) {
@@ -157,7 +193,31 @@ public class TransactionHistoryActivity extends AppCompatActivity {
             }
         });
 
-
-        return arrayList;
     }
+
+    private void setupViewPager(ViewPager viewPager) {
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        CreditTxnFragment creditTxnFragment = new CreditTxnFragment();
+        creditTxnFragment.setFragmentActionListener(this);
+        DebitTxnFragment debitTxnFragment = new DebitTxnFragment();
+        debitTxnFragment.setFragmentActionListener(this);
+
+        adapter.addFragment(creditTxnFragment, "Credit Txn");
+        adapter.addFragment(debitTxnFragment, "Debit Txn");
+
+        viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onActionPerformed(Bundle bundle) {
+        Log.d(TAG, "onActionPerformed: ");
+    }
+
+    void updateAdapter(int position) {
+        if (position == 0)
+            adapter.update(position, creditTxnList);
+        else adapter.update(position, debitTxnList);
+    }
+
 }

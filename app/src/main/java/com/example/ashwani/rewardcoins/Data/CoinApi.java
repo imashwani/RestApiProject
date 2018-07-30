@@ -9,7 +9,7 @@ import retrofit2.http.POST;
 
 public class CoinApi {
 
-    private static final String baseUrl = "http://d6c8de3d.ngrok.io/";
+    private static final String baseUrl = "http://87fd451e.ngrok.io/";
 
     public static CoinService coinService = null;
 

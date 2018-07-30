@@ -57,8 +57,12 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else {
-
+//TODO: un comment the below line
                 makeApiRequest();
+//                intent = new Intent(SplashActivity.this, MemberActivity.class);
+//                startActivity(intent);
+//                finish();
+
             }
 
         }, delayDuration);
