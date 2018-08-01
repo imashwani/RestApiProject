@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         submitBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                submitBT.setClickable(false);
+
                 progressBar.setVisibility(View.VISIBLE);
 
                 int delayDuration = 100;
@@ -87,12 +90,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void askForResponse() {
         Map<String, Object> jsonParams = new ArrayMap<>();
         //put something inside the map, could be null
         String mobileNo = phoneNumberET.getText().toString();
-        jsonParams.put("mob", mobileNo);
+        jsonParams.put("mob", mobileNo.trim());
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
                 (new JSONObject(jsonParams)).toString());
@@ -131,11 +133,13 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
+                        submitBT.setClickable(true);
                         progressBar.setVisibility(View.INVISIBLE);
                         tvError.setVisibility(View.VISIBLE);
-                        tvError.setText("Invalid username or password");
+                        tvError.setText("Phone number not registered!!");
                     }
                 } else {
+                    submitBT.setClickable(true);
                     progressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(MainActivity.this, "Server under maintenance", Toast.LENGTH_SHORT).show();
                 }
@@ -147,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 String err = "Failed response from server\nFailed to Login";
                 tvError.setVisibility(View.VISIBLE);
                 tvError.setText(err);
+                submitBT.setClickable(true);
                 Toast.makeText(MainActivity.this, "Failed response from server\nFailed to Login", Toast.LENGTH_SHORT).show();
             }
         });
@@ -162,9 +167,8 @@ public class MainActivity extends AppCompatActivity {
         submitBT.setVisibility(View.INVISIBLE);
     }
 
-
     private boolean isValidMobileNb(CharSequence s) {
-        Log.d(TAG, "isValidMobileNb: phone number" + s + "\tlength:" + s.toString().length());
+        Log.d(TAG, "isValidMobileNb: phone_hand_held number" + s + "\tlength:" + s.toString().length());
         return s.length() == 10;
 
     }

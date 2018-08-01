@@ -1,4 +1,4 @@
-package com.example.ashwani.rewardcoins;
+package com.example.ashwani.rewardcoins.Fragments;
 
 import android.os.Bundle;
 

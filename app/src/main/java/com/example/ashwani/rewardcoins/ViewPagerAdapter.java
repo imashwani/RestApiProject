@@ -41,7 +41,6 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
         Fragment f = mFragmentList.get(i);
         f.setArguments(bundle);
         f.onResume();
-
     }
 
     @Override

@@ -71,7 +71,6 @@ public abstract class MyBroadcastReceiver extends BroadcastReceiver {
                     b = false;
 //                    code=null;
                     break;
-
                 }
         }
 

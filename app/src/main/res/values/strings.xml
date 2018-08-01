@@ -26,4 +26,6 @@
     <string name="permission_dialog_message">RewardCoins will now request to read SMS permission. We will be sending OTP on your number and  permission is needed for OTP verfication perpose.</string>
     <string name="_10_digit_mobile_number">10 Digit Mobile Number</string>
     <string name="date_time_fake">  22 aug 2018\n 11:45 AM </string>
+
+    <string name="rupee_symbol">\u20B9 </string>
 </resources>

@@ -22,8 +22,7 @@
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
+            android:windowSoftInputMode="adjustResize"></activity>
         <activity
             android:name=".MemberActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -43,25 +42,25 @@
         <activity
             android:name=".OtpVerifyActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustResize">
-
-        </activity>
+            android:windowSoftInputMode="adjustResize"></activity>
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".TransactionHistoryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustResize"
             android:label="Transaction History"
-            android:parentActivityName=".MemberActivity" />
+            android:parentActivityName=".MemberActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".EnterPinActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".CreatePinActivity" />
+        <activity android:name=".ChangePhoneNoActivity"></activity>
     </application>
 
 </manifest>

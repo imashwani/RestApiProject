@@ -51,6 +51,7 @@ public class OtpVerifyActivity extends AppCompatActivity {
     EditText otpET;
     ProgressBar progressBar;
     String mobileNo = null;
+    Boolean IS_BACK_PRESS_DISABLED = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +64,10 @@ public class OtpVerifyActivity extends AppCompatActivity {
         if (mobileNo.length() > 0)
             userPhoneNumber.setText("+91 " + mobileNo);
 
-
         submitBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                submitBT.setClickable(false);
                 String code = otpET.getText().toString();
                 if (code.length() == 4) {
                     sendCodeToServer(code);
@@ -107,22 +108,32 @@ public class OtpVerifyActivity extends AppCompatActivity {
             }
         });
 
-
-        final int[] time = {30};
-        new CountDownTimer(30000, 1000) {
+        int time = 3000;
+        new CountDownTimer(time, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                timer.setText("0:" + checkDigit(time[0]));
-                time[0]--;
+                timer.setText("seconds remaining: " + millisUntilFinished / 1000);
             }
 
             public void onFinish() {
                 //when the timer reaches 0:00
+                IS_BACK_PRESS_DISABLED = false;
+                timer.setText("done!");
                 otpNotDetected();
-
             }
-
         }.start();
+
+//        final int[] time = {};
+//        new CountDownTimer(30000, 1000) {
+//            public void onTick(long millisUntilFinished) {
+//                timer.setText("0:" + checkDigit(time[0]));
+//                time[0]--;
+//            }
+//
+//            public void onFinish() {
+//            }
+//
+//        }.start();
 
 
         broadcastReceiver = new MyBroadcastReceiver() {
@@ -140,15 +151,17 @@ public class OtpVerifyActivity extends AppCompatActivity {
     }
 
     private void otpNotDetected() {
+        enableSubmit();
         msgUnderPB.setText("Please enter the OTP manually");
         submitBT.setVisibility(View.VISIBLE);
 
+        otpET.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
         timer.setVisibility(View.GONE);
     }
 
     private void sendCodeToServer(String code) {
-        //send phone and 4 digit otp and on success start memberActivity
+        //send phone_hand_held and 4 digit otp and on success start memberActivity
         //show PB with msg verifying OTP
         progressBar.setVisibility(View.VISIBLE);
         msgUnderPB.setText("Verifying the OTP");
@@ -163,7 +176,6 @@ public class OtpVerifyActivity extends AppCompatActivity {
                     break;
 
                 case "homePage"://memberActivity
-
                     sendToMemberAct(code);
                     break;
 
@@ -176,7 +188,6 @@ public class OtpVerifyActivity extends AppCompatActivity {
         } else {
             Log.d(TAG, "sendCodeToServer: whereTo not found in intent extra:" + whereTo);
         }
-
 
     }
 
@@ -199,7 +210,10 @@ public class OtpVerifyActivity extends AppCompatActivity {
         response.enqueue(new Callback<OtpHVerifyResponse>() {
             @Override
             public void onResponse(Call<OtpHVerifyResponse> call, Response<OtpHVerifyResponse> response) {
-                if (response.body().getSuccess() == true) {
+                if (response == null) {
+                    Toast.makeText(OtpVerifyActivity.this,
+                            "Server under maintenance:\n response=null", Toast.LENGTH_SHORT).show();
+                } else if (response.body().getSuccess() == true) {
                     String username = response.body().getName();
                     String al = response.body().getAl();
                     String coins = response.body().getCoins().toString();
@@ -231,7 +245,6 @@ public class OtpVerifyActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void sendToNewPin(String code) {
@@ -255,15 +268,22 @@ public class OtpVerifyActivity extends AppCompatActivity {
                     finish();
                 } else {
                     Toast.makeText(OtpVerifyActivity.this, response.body().getMsg(), Toast.LENGTH_SHORT).show();
+                    enableSubmit();
                 }
             }
 
             @Override
             public void onFailure(Call<OtpLVerifyResponse> call, Throwable t) {
                 Toast.makeText(OtpVerifyActivity.this, "No response from server", Toast.LENGTH_SHORT).show();
+                enableSubmit();
             }
         });
 
+    }
+
+    private void enableSubmit() {
+        submitBT.setClickable(true);
+        submitBT.setClickable(true);
     }
 
     private void init() {
@@ -342,6 +362,14 @@ public class OtpVerifyActivity extends AppCompatActivity {
         super.onDestroy();
         //un registering the BR
         unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (IS_BACK_PRESS_DISABLED)
+            Toast.makeText(this, "Sorry, back press has been disabled for 30sec!", Toast.LENGTH_SHORT).show();
+        else
+            super.onBackPressed();
     }
 
     public boolean isSmsPermissionGranted() {

@@ -17,16 +17,20 @@
 
     <EditText
         android:id="@+id/create_new_pin_et"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="New Pin"
+        android:layout_gravity="center"
+        android:hint="\t\t\t\tNew Pin\t\t\t\t"
+        android:textAlignment="center"
         android:inputType="number" />
 
     <EditText
+        android:layout_width="wrap_content"
         android:id="@+id/create_confirm_pin_et"
-        android:layout_width="match_parent"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:hint="Confirm New Pin"
+        android:hint=" Confirm New Pin "
+        android:textAlignment="center"
         android:inputType="number" />
 
     <TextView
@@ -40,11 +44,13 @@
         android:textColor="#e12016" />
 
     <Button
+        style="@style/buttonBlue"
         android:id="@+id/bt_create_pin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="32dp"
-        android:text="Create new pin" />
+        android:padding="4dp"
+        android:text=" Create new pin " />
 
 </LinearLayout>

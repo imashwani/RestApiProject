@@ -52,6 +52,7 @@ public class CreatePinActivity extends AppCompatActivity {
         createPinBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                createPinBT.setClickable(false);
                 error.setVisibility(View.GONE);
                 int i = checkData();
                 Log.d(TAG, "onClick: cheack data" + i);
@@ -72,6 +73,7 @@ public class CreatePinActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<CreatePinResponse> call, Response<CreatePinResponse> response) {
                             if (response == null) {
+                                createPinBT.setClickable(true);
                                 Toast.makeText(CreatePinActivity.this,
                                         "Null response from server", Toast.LENGTH_SHORT).show();
                             } else if (response.body().getSuccess() == true) {
@@ -82,6 +84,7 @@ public class CreatePinActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             } else {
+                                createPinBT.setClickable(true);
                                 Toast.makeText(CreatePinActivity.this,
                                         "Invalid response from server!\n plz RETRY", Toast.LENGTH_SHORT).show();
                             }
@@ -89,12 +92,17 @@ public class CreatePinActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<CreatePinResponse> call, Throwable t) {
+                            createPinBT.setClickable(true);
+                            Toast.makeText(CreatePinActivity.this,
+                                    "Failed response from server!\n plz RETRY", Toast.LENGTH_SHORT).show();
                         }
                     });
 
                 } else if (i == 0) {
+                    createPinBT.setClickable(true);
                     showError("Fields can't be empty");
                 } else if (i == 2) {
+                    createPinBT.setClickable(true);
                     showError("new entered pins don't match!");
                 }
             }
@@ -149,7 +157,6 @@ public class CreatePinActivity extends AppCompatActivity {
     }
 
     private void initView() {
-
         newPinET = findViewById(R.id.create_new_pin_et);
         confirmPinET = findViewById(R.id.create_confirm_pin_et);
         createPinBT = findViewById(R.id.bt_create_pin);

@@ -1,4 +1,4 @@
-package com.example.ashwani.rewardcoins;
+package com.example.ashwani.rewardcoins.Fragments;
 
 
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.ashwani.rewardcoins.Data.CoinApi;
 import com.example.ashwani.rewardcoins.Data.TransactionResponse;
+import com.example.ashwani.rewardcoins.R;
 
 import org.json.JSONObject;
 
@@ -42,12 +43,11 @@ public class SendCoinFragment extends Fragment {
     Button sendCoinBT;
     EditText coinsToSend, referenceNoEt;
     TextView receiverPhoneTV, receiverNameTV, userCoins;
-    String receiverName, receiverPhone;
     Bundle receivedBundle;
     View root;
-    String userType = "";
     RadioGroup radioGroup;
-    String modeOfTxn = "";
+
+    String receiverName, receiverPhone, userType = "", modeOfTxn = "";
 
     public SendCoinFragment() {// Required empty public constructor
     }
@@ -94,10 +94,12 @@ public class SendCoinFragment extends Fragment {
         sendCoinBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendCoinBT.setClickable(false);
                 if (coinsToSend.getText().length() > 0) {
 
                     sendCoinsShowDialog(coinsToSend.getEditableText().toString());
                 } else {
+                    sendCoinBT.setClickable(true);
                     coinsToSend.setError("Enter no. of coins");
                 }
 
@@ -139,7 +141,7 @@ public class SendCoinFragment extends Fragment {
         } else {
             hideSendCoinBT();
             Log.d(TAG, "isValidData: setting some error");
-            coinsToSend.setError("You have only" + Integer.parseInt(userCoins.getText().toString()) + " coins");
+            coinsToSend.setError("You have only " + getResources().getString(R.string.rupee_symbol) + " " + Integer.parseInt(userCoins.getText().toString()));
         }
     }
 
@@ -191,41 +193,48 @@ public class SendCoinFragment extends Fragment {
             @Override
             public void onResponse(Call<TransactionResponse> call, Response<TransactionResponse> response) {
                 String status = response.body().getSuccess().toString();
+                if (response != null) {
+                    if (status.equals("true")) {
+                        Toast.makeText(getActivity(), "The transaction is successful",
+                                Toast.LENGTH_SHORT).show();
+                        if (fragmentActionListener != null) {
+                            Log.d(TAG, "onResponse: not null " + fragmentActionListener);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt(FragmentActionListener.ACTION_KEY, FragmentActionListener.ACTION_VALUE_SEND_SELECTED);
 
-                if (status.equals("true")) {
-                    Toast.makeText(getActivity(), "The transaction is successful",
-                            Toast.LENGTH_SHORT).show();
-                    if (fragmentActionListener != null) {
-                        Log.d(TAG, "onResponse: not null " + fragmentActionListener);
-                        Bundle bundle = new Bundle();
-                        bundle.putInt(FragmentActionListener.ACTION_KEY, FragmentActionListener.ACTION_VALUE_SEND_SELECTED);
+                            bundle.putString(FragmentActionListener.KEY_NAME_RECEIVER, receiverName);
+                            bundle.putString(FragmentActionListener.KEY_RECEIVER_PHONE, receiverPhone);
+                            bundle.putString(FragmentActionListener.KEY_TXN_AMMOUNT, response.body().getTamt().toString());
+                            bundle.putString(FragmentActionListener.KEY_TXN_TIME, response.body().getTime());
+                            int updatedUserBalance = 0;
+                            if (!userType.equals("C")) {
+                                updatedUserBalance = response.body().getUbal();
+                            }
+                            bundle.putString(fragmentActionListener.KEY_UPDATED_BAL, String.valueOf(updatedUserBalance));
 
-                        bundle.putString(FragmentActionListener.KEY_NAME_RECEIVER, receiverName);
-                        bundle.putString(FragmentActionListener.KEY_RECEIVER_PHONE, receiverPhone);
-                        bundle.putString(FragmentActionListener.KEY_TXN_AMMOUNT, response.body().getTamt().toString());
-                        bundle.putString(FragmentActionListener.KEY_TXN_TIME, response.body().getTime());
-                        int updatedUserBalance = 0;
-                        if (!userType.equals("C")) {
-                            updatedUserBalance = response.body().getUbal();
+                            fragmentActionListener.onActionPerformed(bundle);
                         }
-                        bundle.putString(fragmentActionListener.KEY_UPDATED_BAL, String.valueOf(updatedUserBalance));
-
-                        fragmentActionListener.onActionPerformed(bundle);
+                    } else {
+                        sendCoinBT.setClickable(true);
+                        Toast.makeText(getActivity(),
+                                "Unsuccessful transaction; some error occurred",
+                                Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    sendCoinBT.setClickable(true);
                     Toast.makeText(getActivity(),
-                            "Unsuccessful transaction; some error occurred",
+                            "Unsuccessful transaction\n null response from server",
                             Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransactionResponse> call, Throwable t) {
+                sendCoinBT.setClickable(true);
                 Toast.makeText(getActivity(), "transaction didn't went through",
                         Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
 

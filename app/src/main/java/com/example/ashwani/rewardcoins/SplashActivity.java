@@ -102,7 +102,8 @@ public class SplashActivity extends AppCompatActivity {
                         finish();
                     }
                 } else {
-                    Toast.makeText(SplashActivity.this, "Failed response from Server, Retrying...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SplashActivity.this,
+                            "Failed response from Server, Retrying...", Toast.LENGTH_SHORT).show();
                     makeApiRequest();
                 }
             }

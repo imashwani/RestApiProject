@@ -7,15 +7,6 @@
     android:background="#b3d6d4"
     tools:context=".SplashActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Introducing"
-        android:textSize="32sp"
-        android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/coin_icon_splash"
         android:layout_width="wrap_content"
@@ -34,15 +25,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="RewardCoins"
-        android:textColor="#2eb6d7"
+        android:textColor="#d7422e"
         android:textSize="44sp"
         android:textStyle="bold|italic"
         android:typeface="serif"

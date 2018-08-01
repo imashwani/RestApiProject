@@ -1,4 +1,4 @@
-package com.example.ashwani.rewardcoins;
+package com.example.ashwani.rewardcoins.Fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.ashwani.rewardcoins.R;
 import com.example.ashwani.rewardcoins.RecyclerView.CoinTransactionAdapter;
+import com.example.ashwani.rewardcoins.TransactionCls;
 
 import java.util.ArrayList;
 

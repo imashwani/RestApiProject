@@ -4,9 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:layout_marginTop="18dp"
+    android:layout_marginTop="0dp"
     android:orientation="vertical"
     tools:context=".OtpVerifyActivity">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:padding="8dp"
+        android:src="@drawable/mobile_otp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,11 +29,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="4dp"
+        android:textColor="#000000"
         android:text="9911457786"
         android:textStyle="bold"
         android:typeface="monospace" />
 
     <EditText
+        android:visibility="gone"
         android:id="@+id/et_otp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,11 +70,25 @@
         android:layout_margin="8dp"
         android:text=" Please wait while we \nauto-fetching the OTP" />
 
-    <Button
-        android:id="@+id/submit_bt_otp"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="12dp"
-        android:text="Submit" />
+        android:layout_margin="18dp">
+
+        <Button
+            style="@style/buttonBlue"
+            android:id="@+id/submit_bt_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Submit" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_beside_submit_otp_bt"
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </LinearLayout>
+
 </LinearLayout>

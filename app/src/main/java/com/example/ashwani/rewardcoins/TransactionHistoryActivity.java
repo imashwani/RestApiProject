@@ -13,6 +13,9 @@ import android.widget.Toast;
 import com.example.ashwani.rewardcoins.Data.CoinApi;
 import com.example.ashwani.rewardcoins.Data.Tran;
 import com.example.ashwani.rewardcoins.Data.TransactionHistoryResponse;
+import com.example.ashwani.rewardcoins.Fragments.CreditTxnFragment;
+import com.example.ashwani.rewardcoins.Fragments.DebitTxnFragment;
+import com.example.ashwani.rewardcoins.Fragments.FragmentActionListener;
 
 import org.json.JSONObject;
 
@@ -34,7 +37,8 @@ public class TransactionHistoryActivity extends AppCompatActivity implements Fra
 
     String userType, mobileNo;
 
-    ArrayList<TransactionCls> txnList, creditTxnList, debitTxnList;
+    ArrayList<TransactionCls> creditTxnList, debitTxnList;
+    boolean isCreditReq = false, isDebitReq = false;
 
     ViewPager viewPager;
     TabLayout tabLayout;
@@ -63,7 +67,25 @@ public class TransactionHistoryActivity extends AppCompatActivity implements Fra
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
-                loadList(position);
+                switch (position) {
+                    case 0:
+                        if (isDebitReq == false) {
+                            isDebitReq = true;
+                            if (debitTxnList == null)
+                                loadList(position);
+                            else
+                                updateAdapter(position);
+                        }
+                        break;
+                    case 1:
+                        if (isCreditReq == false) {
+                            isCreditReq = true;
+                            if (creditTxnList == null)
+                                loadList(position);
+                            else updateAdapter(position);
+                        }
+                        break;
+                }
             }
 
             @Override
@@ -78,7 +100,6 @@ public class TransactionHistoryActivity extends AppCompatActivity implements Fra
         Log.d(TAG, "onCreate: view pager current" + viewPager.getCurrentItem());
 
         loadList(0);
-
 //        int delayDuration = 500;
 //        new Handler().postDelayed(() -> {
 //            Log.d(TAG, "onCreate: ");
@@ -94,7 +115,7 @@ public class TransactionHistoryActivity extends AppCompatActivity implements Fra
     private void loadList(int position) {
         String mode = "Debit";
 
-        if (position == 0) mode = "Credit";
+        if (position == 1) mode = "Credit";
 
         ArrayList<TransactionCls> arrayList = new ArrayList<>();
 
@@ -158,8 +179,9 @@ public class TransactionHistoryActivity extends AppCompatActivity implements Fra
                                 }
 
                                 date = simpleDateFormat.format(date1);
+                                amount = "\u20B9 " + t.getAmount().toString();
 
-                                arrayList.add(new TransactionCls(date, t.getAmount().toString(),
+                                arrayList.add(new TransactionCls(date, amount,
                                         "", ""));
                             }
                         }
@@ -172,8 +194,9 @@ public class TransactionHistoryActivity extends AppCompatActivity implements Fra
 //                    } else setDataToRV(arrayList);
 
                         if (position == 0)
+                            debitTxnList = arrayList;
+                        else
                             creditTxnList = arrayList;
-                        else debitTxnList = arrayList;
 
                         updateAdapter(position);
 
@@ -183,7 +206,6 @@ public class TransactionHistoryActivity extends AppCompatActivity implements Fra
                     Toast.makeText(TransactionHistoryActivity.this, "response is null", Toast.LENGTH_SHORT).show();
                 }
             }
-
 
             @Override
             public void onFailure(Call<TransactionHistoryResponse> call, Throwable t) {
@@ -203,8 +225,11 @@ public class TransactionHistoryActivity extends AppCompatActivity implements Fra
         DebitTxnFragment debitTxnFragment = new DebitTxnFragment();
         debitTxnFragment.setFragmentActionListener(this);
 
-        adapter.addFragment(creditTxnFragment, "Credit Txn");
         adapter.addFragment(debitTxnFragment, "Debit Txn");
+        Log.d(TAG, "setupViewPager: " + String.valueOf(userType != "C"));
+        Log.d(TAG, "setupViewPager: " + userType);
+        if (!userType.equals("C"))
+            adapter.addFragment(creditTxnFragment, "Credit Txn");
 
         viewPager.setAdapter(adapter);
     }
@@ -216,8 +241,8 @@ public class TransactionHistoryActivity extends AppCompatActivity implements Fra
 
     void updateAdapter(int position) {
         if (position == 0)
-            adapter.update(position, creditTxnList);
-        else adapter.update(position, debitTxnList);
+            adapter.update(position, debitTxnList);
+        else adapter.update(position, creditTxnList);
     }
 
 }

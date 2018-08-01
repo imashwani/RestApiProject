@@ -7,15 +7,17 @@
     tools:context=".ProfileActivity">
 
     <TextView
-        android:id="@+id/user_name_profile"
+        android:id="@+id/user_name_tv_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Rajiv Ranjan"
+        android:layout_margin="4dp"
+        android:text="Rajiv Kumar"
+        android:textColor="@android:color/black"
         android:textSize="32sp" />
 
     <TextView
-        android:id="@+id/user_phone_profile"
+        android:id="@+id/user_phone_tv_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
@@ -23,13 +25,13 @@
         android:text="+91 9911418855" />
 
     <TextView
-        android:id="@+id/user_email_profile"
+        android:id="@+id/user_type_tv_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp"
         android:padding="8dp"
-        android:text="mail@gmail.com" />
+        android:text="User type: C" />
 
     <android.app.FragmentBreadCrumbs
         android:layout_width="match_parent"
@@ -42,7 +44,7 @@
         android:id="@+id/bt_change_password_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Change password"
+        android:text="Change Phone Number"
         android:textAllCaps="false" />
 
 </LinearLayout>

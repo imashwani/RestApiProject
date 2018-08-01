@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SendCoinFragment">
+    tools:context=".Fragments.SendCoinFragment">
 
     <TextView
         android:id="@+id/receiver_name_tv"
@@ -14,11 +14,15 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:padding="8dp"
+        android:textColor="#000000"
         android:text="Sanju"
         android:textStyle="bold"
+        android:textSize="22dp"
         android:typeface="monospace" />
 
     <TextView
+        android:textColor="#000000"
+        android:textSize="22dp"
         android:id="@+id/receiver_phone_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,7 +47,7 @@
             android:id="@+id/coins_to_Send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Coins to Transfer"
+            android:hint="Enter Amount"
             android:inputType="number"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -53,28 +57,31 @@
 
     <RadioGroup
         android:id="@+id/mode_radio_grp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp">
+        android:layout_margin="8dp"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/online_rb"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Online" />
+            android:text="Online " />
 
         <RadioButton
             android:id="@+id/cash_rb"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Cash" />
+            android:text="Cash " />
 
         <RadioButton
             android:id="@+id/cheque_rb"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Cheque" />
+            android:text="Cheque " />
     </RadioGroup>
 
     <EditText
@@ -82,7 +89,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="Reference No." />
+        android:hint=" Reference No. " />
+
 
     <Button
         android:id="@+id/send_coin_button"
@@ -93,6 +101,6 @@
         android:background="@drawable/rounder_corner_bg"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
-        android:text="Send Coins" />
+        android:text="Transfer" />
 
 </LinearLayout>

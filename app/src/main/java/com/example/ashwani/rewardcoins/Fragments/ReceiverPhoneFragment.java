@@ -1,4 +1,4 @@
-package com.example.ashwani.rewardcoins;
+package com.example.ashwani.rewardcoins.Fragments;
 
 
 import android.app.Activity;
@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.example.ashwani.rewardcoins.Data.CoinApi;
 import com.example.ashwani.rewardcoins.Data.UserDataResponse;
+import com.example.ashwani.rewardcoins.R;
+import com.example.ashwani.rewardcoins.Util;
 
 import org.json.JSONObject;
 
@@ -120,44 +122,48 @@ public class ReceiverPhoneFragment extends Fragment {
             call.enqueue(new Callback<UserDataResponse>() {
                 @Override
                 public void onResponse(Call<UserDataResponse> call, Response<UserDataResponse> response) {
-                    String status = response.body().getSuccess().toString();
-                    Log.d(TAG, "onResponse: response status:" + status);
-
-                    if (status.equals("true") & receiverPhone.getError() == null) {
-
-                        Toast.makeText(getActivity(), "valid no, yes " + s, Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onResponse: phone Number in database : yes " + s);
-
-                        //invoking the method in the Member Activity
-                        if (fragmentActionListener != null) {
-                            Bundle bundle = new Bundle();
-                            SharedPreferences sharedPreferences =
-                                    getContext().getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
-//        token = sharedPreferences.getString(Util.getTokenKey(), "");
-                            String senderMob = sharedPreferences.getString(Util.getPhonenoKey(), "");
-                            String userType = sharedPreferences.getString(Util.getAccessLevelKey(), "");
-
-                            bundle.putInt(FragmentActionListener.ACTION_KEY, FragmentActionListener.ACTION_VALUE_PROCEED_SELECTED);
-                            bundle.putString(FragmentActionListener.KEY_NAME_RECEIVER, response.body().getNm());
-                            bundle.putString(FragmentActionListener.KEY_RECEIVER_PHONE, receiverPhone.getEditableText().toString());
-                            //getting the type of receiver
-                            bundle.putString(FragmentActionListener.KEY_RECEIVER_TYPE, response.body().getTOR());
-
-                            bundle.putString(FragmentActionListener.KEY_SENDER_PHONE, senderMob);
-                            String receiverName = response.body().getNm().toString();
-                            bundle.putString(FragmentActionListener.KEY_NAME_RECEIVER, receiverName);
-
-                            bundle.putString(FragmentActionListener.KEY_USER_TYPE, userType);
-
-                            Log.d(TAG, "onResponse: receiver phone receivedBundle: " + bundle);
+                    if (response != null) {
 
 
-                            fragmentActionListener.onActionPerformed(bundle);
+                        String status = response.body().getSuccess().toString();
+                        Log.d(TAG, "onResponse: response status:" + status);
+
+                        if (status.equals("true") & receiverPhone.getError() == null) {
+
+                            Toast.makeText(getActivity(), "valid no, yes " + s, Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onResponse: phone_hand_held Number in database : yes " + s);
+
+                            //invoking the method in the Member Activity
+                            if (fragmentActionListener != null) {
+                                Bundle bundle = new Bundle();
+                                SharedPreferences sharedPreferences =
+                                        getContext().getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
+                                //        token = sharedPreferences.getString(Util.getTokenKey(), "");
+                                String senderMob = sharedPreferences.getString(Util.getPhonenoKey(), "");
+                                String userType = sharedPreferences.getString(Util.getAccessLevelKey(), "");
+
+                                bundle.putInt(FragmentActionListener.ACTION_KEY, FragmentActionListener.ACTION_VALUE_PROCEED_SELECTED);
+                                bundle.putString(FragmentActionListener.KEY_NAME_RECEIVER, response.body().getNm());
+                                bundle.putString(FragmentActionListener.KEY_RECEIVER_PHONE, receiverPhone.getEditableText().toString());
+                                //getting the type of receiver
+                                bundle.putString(FragmentActionListener.KEY_RECEIVER_TYPE, response.body().getTOR());
+
+                                bundle.putString(FragmentActionListener.KEY_SENDER_PHONE, senderMob);
+                                String receiverName = response.body().getNm().toString();
+                                bundle.putString(FragmentActionListener.KEY_NAME_RECEIVER, receiverName);
+
+                                bundle.putString(FragmentActionListener.KEY_USER_TYPE, userType);
+
+                                Log.d(TAG, "onResponse: receiver phone_hand_held receivedBundle: " + bundle);
+
+
+                                fragmentActionListener.onActionPerformed(bundle);
+                            }
+
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            receiverPhone.setError("PhoneNo not in DB");
                         }
-
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                        receiverPhone.setError("PhoneNo not in DB");
                     }
                 }
 

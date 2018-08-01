@@ -39,7 +39,6 @@ public class ChangePinActivity extends AppCompatActivity {
                 } else if (i == 3) {
                     showError("New pin is same as previous one!");
                 }
-
             }
         });
 

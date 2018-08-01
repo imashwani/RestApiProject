@@ -14,15 +14,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.ashwani.rewardcoins.Fragments.FragmentActionListener;
+import com.example.ashwani.rewardcoins.Fragments.ReceiverPhoneFragment;
+import com.example.ashwani.rewardcoins.Fragments.SendCoinFragment;
 
 public class MemberActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FragmentActionListener {
@@ -31,7 +34,7 @@ public class MemberActivity extends AppCompatActivity
     Toolbar toolbar;
     NavigationView navigationView;
     Button transferCoinsInit;
-    LinearLayout formLinearLayout;
+    CardView formCardLayout;
     TextView userCoins, phoneNumberNavBar;
     ImageButton crossImageBt;
 
@@ -56,7 +59,7 @@ public class MemberActivity extends AppCompatActivity
 
         userCoins.setText("");
         if (getIntent().hasExtra(Util.getCoinsKey())) {
-            userCoins.setText(getIntent().getStringExtra(Util.getCoinsKey()));
+            userCoins.setText(getResources().getString(R.string.rupee_symbol) + " " + getIntent().getStringExtra(Util.getCoinsKey()));
         }
         //TODO: implent hide and show method
         transferCoinsInit.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +80,7 @@ public class MemberActivity extends AppCompatActivity
 
     private void showForm() {
         transferCoinsInit.setVisibility(View.GONE);
-        formLinearLayout.setVisibility(View.VISIBLE);
+        formCardLayout.setVisibility(View.VISIBLE);
 
         for (int i = fragmentManager.getBackStackEntryCount(); i > 0; i--) {
             fragmentManager.popBackStackImmediate();
@@ -103,7 +106,7 @@ public class MemberActivity extends AppCompatActivity
     }
 
     private void hideForm() {
-        formLinearLayout.setVisibility(View.INVISIBLE);
+        formCardLayout.setVisibility(View.INVISIBLE);
         transferCoinsInit.setVisibility(View.VISIBLE);
     }
 
@@ -178,8 +181,8 @@ public class MemberActivity extends AppCompatActivity
 
         fragmentManager = getSupportFragmentManager();
 
-        formLinearLayout = findViewById(R.id.formLinerLayout);
-        formLinearLayout.setVisibility(View.INVISIBLE);
+        formCardLayout = findViewById(R.id.crad_view_form);
+        formCardLayout.setVisibility(View.INVISIBLE);
 
         userCoins = findViewById(R.id.user_coin_tv);
         transferCoinsInit = findViewById(R.id.transfer_coin_init);
@@ -210,28 +213,6 @@ public class MemberActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.member, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -239,7 +220,7 @@ public class MemberActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.nav_profile) {
             Intent intent = new Intent(this, ProfileActivity.class);
-            intent.putExtra("phone", phoneNumberNavBar.getText());
+            intent.putExtra("phone_hand_held", phoneNumberNavBar.getText());
             startActivity(intent);
 
         } else if (id == R.id.nav_logout) {
@@ -261,9 +242,8 @@ public class MemberActivity extends AppCompatActivity
     }
 
     void updateBalance(String bal) {
-        userCoins.setText("bal");
+        userCoins.setText("\u20B9 " + bal);
     }
-
 
 }
 

@@ -46,18 +46,18 @@ public class EnterPinActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra(Util.getPhonenoKey())) {
             mobileNo = getIntent().getStringExtra(Util.getPhonenoKey());
-            userPhoneTV.setText("Phone Number: +91 " + mobileNo);
+            userPhoneTV.setText(" +91 " + mobileNo);
         }
 
         submitBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                submitBt.setClickable(false);
                 // submit pin to server
                 Map<String, Object> jsonParams = new ArrayMap<>();
                 //put something inside the map, could be null
                 jsonParams.put("mob", mobileNo);
                 jsonParams.put("pin", pinET.getText().toString());
-
 
                 RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
                         (new JSONObject(jsonParams)).toString());
@@ -69,7 +69,7 @@ public class EnterPinActivity extends AppCompatActivity {
                 response.enqueue(new Callback<EnterPinResponse>() {
                     @Override
                     public void onResponse(Call<EnterPinResponse> call, Response<EnterPinResponse> response) {
-                        if (response.body() != null) {
+                        if (response != null) {
                             if (response.body().getSuccess() == true) {
                                 Toast.makeText(EnterPinActivity.this,
                                         "Correct PIN entered", Toast.LENGTH_SHORT).show();
@@ -79,13 +79,13 @@ public class EnterPinActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             } else {
+                                submitBt.setClickable(true);
                                 errorTv.setVisibility(View.VISIBLE);
                                 errorTv.setText("INVALID PIN,PLEASE RETRY!!");
-
-
                             }
 
                         } else {
+                            submitBt.setClickable(true);
                             Log.d(TAG, "onResponse: no data" + response.body());
                             Toast.makeText(EnterPinActivity.this, "Server under Maintenance", Toast.LENGTH_SHORT).show();
                         }
@@ -93,6 +93,7 @@ public class EnterPinActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<EnterPinResponse> call, Throwable t) {
+                        submitBt.setClickable(false);
                         errorTv.setVisibility(View.VISIBLE);
                         errorTv.setText("NO RESPONSE FROM SERVER,PLEASE RETRY!!");
                     }

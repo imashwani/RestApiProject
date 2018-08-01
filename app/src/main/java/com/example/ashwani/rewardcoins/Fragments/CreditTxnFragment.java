@@ -1,7 +1,9 @@
-package com.example.ashwani.rewardcoins;
+package com.example.ashwani.rewardcoins.Fragments;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.ashwani.rewardcoins.R;
 import com.example.ashwani.rewardcoins.RecyclerView.CoinTransactionAdapter;
+import com.example.ashwani.rewardcoins.TransactionCls;
+import com.example.ashwani.rewardcoins.Util;
 
 import java.util.ArrayList;
 
@@ -27,7 +32,7 @@ public class CreditTxnFragment extends Fragment {
     RecyclerView.LayoutManager mLayoutManager;
     CoinTransactionAdapter mCoinTransactionAdapter;
     ProgressBar progressBar;
-
+    String userType;
     FragmentActionListener fragmentActionListener;
 
     public CreditTxnFragment() {
@@ -38,6 +43,9 @@ public class CreditTxnFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
+        userType = sharedPreferences.getString(Util.getAccessLevelKey(), "");
+
         root = inflater.inflate(R.layout.fragment_credit_txn, container, false);
         emptyMsgTV = root.findViewById(R.id.credit_txn_history_msg_tv);
         mRecyclerView = root.findViewById(R.id.recycler_view_credit_txn);
@@ -45,7 +53,6 @@ public class CreditTxnFragment extends Fragment {
 
         return root;
     }
-
 
     public void setFragmentActionListener(FragmentActionListener fragmentActionListener) {
         this.fragmentActionListener = fragmentActionListener;
